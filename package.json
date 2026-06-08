@@ -1,5 +1,5 @@
 {
-  "name": "mcp-devkit",
+  "name": "@sriramadari/mcp-devkit",
   "version": "0.1.0",
   "description": "A zero-dependency testing & inspection toolkit for Model Context Protocol (MCP) servers: in-memory and stdio test clients, fluent tool-result assertions, input-schema validation, and an automated conformance checker. Library + CLI.",
   "keywords": [
