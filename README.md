@@ -26,6 +26,41 @@ npm install @modelcontextprotocol/sdk
 
 ---
 
+## What it does and how it helps
+
+**The problem.** MCP servers mostly get tested by clicking around an inspector, or not at all. The SDK ships no test helpers, so an automated test means wiring transports, spawning processes and digging through raw results. Worse, the mistakes that hurt most never throw: a vague tool description, an odd tool name or a schema that doesn't match what the handler expects just makes the model pick the wrong tool or send bad arguments.
+
+**What it does**
+
+- **Test client.** createTestClient() connects to an McpServer in memory (no child process, no network) or launches any server over stdio. Tool listings are cached, and call() validates arguments against the tool's own inputSchema before sending.
+- **Assertions.** expectToolResult(res).toSucceed().toHaveText(/…/).toMatchStructured({…}) reads like the test runner you already use, and works in vitest, jest or node:test.
+- **Conformance checker.** Nine checks: server identity, tools/list works, unique and well-formed names, every tool described, descriptions long enough to be useful, object input schemas, required fields that exist, and graceful handling of an unknown tool. Error-level failures make the report fail; warnings don't.
+- **Mock servers.** mockServer() builds a throwaway server from a few lines of tool specs, for fixtures or for testing your client code.
+- **CLI.** inspect, check and call any stdio server without writing a script, including as a CI step.
+
+**How it helps**
+
+| Before | With `@sriramadari/mcp-devkit` |
+|---|---|
+| Each test sets up a transport, connects, lists tools and unwraps content blocks by hand. | One line: createTestClient({ server }), then call and assert. |
+| A wrong argument comes back from the server as an isError text blob, and the test may still pass. | The call throws before it is sent, naming the field and the expected type. |
+| Users find the confusing tool names and missing descriptions after you ship. | conformanceCheck() in your test suite, or npx @sriramadari/mcp-devkit check in CI, fails the build first. |
+
+**Use it when**
+
+- You are building an MCP server and want real tests for it.
+- You want to vet a third-party MCP server before handing it to an agent.
+- You want a conformance gate in CI.
+
+**Not the right tool for**
+
+- Load testing or fuzzing a server.
+- A full JSON Schema implementation (the built-in validator covers what tool schemas use; reach for ajv beyond that).
+
+**How it works.** A thin layer over the official SDK client. In-memory tests use the SDK's linked InMemoryTransport pair, so client and server talk real JSON-RPC inside one process. The stdio transport loads only when you target a command, which keeps the rest browser-safe. Argument validation uses a small built-in JSON Schema validator, so there are no runtime dependencies beyond the SDK.
+
+---
+
 ## Testing your own server (in-memory)
 
 No child process, no ports — the client and server talk over an in-process transport.
