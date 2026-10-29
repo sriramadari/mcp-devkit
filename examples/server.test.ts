@@ -14,7 +14,7 @@ import {
   conformanceCheck,
   mockServer,
   type TestClient,
-} from "mcp-devkit";
+} from "@sriramadari/mcp-devkit";
 
 // --- the server under test (here, a mock — swap for `buildMyServer()`) -------
 function buildServer() {

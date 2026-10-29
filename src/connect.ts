@@ -5,11 +5,13 @@
  *   - in-process (`InMemoryTransport.createLinkedPair`) for an `McpServer` you
  *     constructed in the same test, and
  *   - stdio (`StdioClientTransport`) for a server you launch as a child process.
+ *
+ * The stdio transport is imported lazily, so in-memory use never loads
+ * `node:child_process` and the kit bundles cleanly for browsers and edge runtimes.
  */
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import type { ConnectOptions, ConnectTarget } from "./types";
 
 export interface Connection {
@@ -43,6 +45,7 @@ export async function openConnection(
   }
 
   if ("command" in target && target.command) {
+    const { StdioClientTransport } = await import("@modelcontextprotocol/sdk/client/stdio.js");
     const transport = new StdioClientTransport({
       command: target.command,
       args: target.args ?? [],

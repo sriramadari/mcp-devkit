@@ -11,12 +11,12 @@ A **zero-dependency testing & inspection toolkit for [Model Context Protocol](ht
 The only runtime peer dependency is the MCP SDK itself.
 
 ```bash
-npm install -D mcp-devkit
+npm install -D @sriramadari/mcp-devkit
 # the MCP SDK is a peer dependency — install it if you haven't:
 npm install @modelcontextprotocol/sdk
 ```
 
-> Requires Node ≥ 18 and `@modelcontextprotocol/sdk` ≥ 1.10. ESM + CJS, fully typed.
+> Requires Node ≥ 18 and `@modelcontextprotocol/sdk` ≥ 1.10. ESM + CJS, fully typed. The in-memory client, assertions, schema validator and conformance checker also run in the browser; only the stdio transport needs Node.
 
 ---
 
@@ -26,7 +26,7 @@ No child process, no ports — the client and server talk over an in-process tra
 
 ```ts
 import { describe, it, beforeAll, afterAll, expect } from "vitest";
-import { createTestClient, expectToolResult, conformanceCheck } from "mcp-devkit";
+import { createTestClient, expectToolResult, conformanceCheck } from "@sriramadari/mcp-devkit";
 import { buildMyServer } from "../src/server"; // returns an McpServer
 
 let client;
@@ -51,7 +51,7 @@ it("is well-formed", async () => {
 Prefer automatic cleanup? Use `withTestClient`, which always closes — even if the body throws:
 
 ```ts
-import { withTestClient, expectToolResult } from "mcp-devkit";
+import { withTestClient, expectToolResult } from "@sriramadari/mcp-devkit";
 
 await withTestClient({ server: buildMyServer() }, async (client) => {
   expectToolResult(await client.call("ping")).toSucceed();
@@ -78,13 +78,13 @@ Everything after `--` is the MCP server command to launch over stdio.
 
 ```bash
 # Dump tools / resources / prompts (add --json for machine output)
-npx mcp-devkit inspect -- node dist/server.js
+npx @sriramadari/mcp-devkit inspect -- node dist/server.js
 
 # Run the conformance battery (exit code 1 if an error-severity check fails)
-npx mcp-devkit check -- npx -y @modelcontextprotocol/server-everything
+npx @sriramadari/mcp-devkit check -- npx -y @modelcontextprotocol/server-everything
 
 # Call a single tool
-npx mcp-devkit call --tool search --args '{"q":"mcp"}' -- node dist/server.js
+npx @sriramadari/mcp-devkit call --tool search --args '{"q":"mcp"}' -- node dist/server.js
 ```
 
 `check` output:
@@ -156,7 +156,7 @@ Build a throwaway server for fixtures. Input schemas are passed straight to the 
 
 ```ts
 import { z } from "zod";
-import { mockServer, createTestClient } from "mcp-devkit";
+import { mockServer, createTestClient } from "@sriramadari/mcp-devkit";
 
 const server = mockServer({
   name: "demo",

@@ -1,6 +1,6 @@
 {
   "name": "@sriramadari/mcp-devkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A zero-dependency testing & inspection toolkit for Model Context Protocol (MCP) servers: in-memory and stdio test clients, fluent tool-result assertions, input-schema validation, and an automated conformance checker. Library + CLI.",
   "keywords": [
     "mcp",
@@ -46,7 +46,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=18"
@@ -57,7 +58,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "@modelcontextprotocol/sdk": ">=1.10.0"
