@@ -17,6 +17,12 @@ npm install @modelcontextprotocol/sdk
 ```
 
 > Requires Node ≥ 18 and `@modelcontextprotocol/sdk` ≥ 1.10. ESM + CJS, fully typed. The in-memory client, assertions, schema validator and conformance checker also run in the browser; only the stdio transport needs Node.
+>
+> For a browser bundle, point the stdio module at a stub so the bundler doesn't follow it into `node:child_process` (it is only imported for `command` targets). With Vite:
+>
+> ```ts
+> resolve: { alias: { "@modelcontextprotocol/sdk/client/stdio.js": "/src/stdio-stub.ts" } }
+> ```
 
 ---
 
